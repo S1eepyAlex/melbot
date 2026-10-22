@@ -1,0 +1,8 @@
+# Ignore attachments:
+/attachments
+
+# Ignore llm history:
+history.json
+
+#Ignore token:
+token*
