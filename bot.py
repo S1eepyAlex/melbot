@@ -177,9 +177,7 @@ async def run_chat_async(user_input, username, history_int = -1):
 async def on_message(message):
     
     if message.author.id == 318104201513140224:
-        if remove_links(message.content) == '' or :
-            pass
-        else:
+        if remove_links(message.content) == '':
             await message.reply(owoify(remove_links(message.content), Owoness.Uvu) + '\n\n\\- Ghostfaggle')
 
     meow_str = sanitize_str(message.content)
