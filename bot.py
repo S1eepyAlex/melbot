@@ -24,8 +24,8 @@ import emoji
 from pytubefix import YouTube
 import string
 import random
-
-
+from owoify.owoify import owoify
+from owoify.owoify import Owoness
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -76,32 +76,32 @@ game = discord.Game("with statistics.")
 
 twitter_lock = asyncio.Lock()
 
-def meowify(text: str) -> str:
-    words = text.split()
-    meow_sounds = ["meow", "meow!", "meow~", "purr", "mew", "MEOW"]
-    meowified_words = []
+# def meowify(text: str) -> str:
+#     words = text.split()
+#     meow_sounds = ["meow", "meow!", "meow~", "purr", "mew", "MEOW"]
+#     meowified_words = []
     
-    for word in words:
-        # Keep punctuation but clear it for matching case logic if needed
-        clean_word = "".join(c for c in word if c.isalnum())
+#     for word in words:
+#         # Keep punctuation but clear it for matching case logic if needed
+#         clean_word = "".join(c for c in word if c.isalnum())
         
-        # 25% chance to replace the word entirely with a meow
-        if random.random() < 0.15:
-            sound = random.choice(meow_sounds)
-            # Match capitalization style
-            if clean_word.isupper():
-                sound = sound.upper()
-            elif clean_word.istitle():
-                sound = sound.capitalize()
-            meowified_words.append(sound)
-        else:
-            meowified_words.append(word)
+#         # 25% chance to replace the word entirely with a meow
+#         if random.random() < 0.15:
+#             sound = random.choice(meow_sounds)
+#             # Match capitalization style
+#             if clean_word.isupper():
+#                 sound = sound.upper()
+#             elif clean_word.istitle():
+#                 sound = sound.capitalize()
+#             meowified_words.append(sound)
+#         else:
+#             meowified_words.append(word)
             
-            # 15% chance to inject an extra cat sound right after the word
-            if random.random() < 0.05:
-                meowified_words.append(random.choice(meow_sounds))
+#             # 15% chance to inject an extra cat sound right after the word
+#             if random.random() < 0.05:
+#                 meowified_words.append(random.choice(meow_sounds))
                 
-    return " ".join(meowified_words)
+#     return " ".join(meowified_words)
 
 def remove_emoji(text):
     return emoji.replace_emoji(text, replace='')
@@ -180,7 +180,7 @@ async def on_message(message):
         if remove_links(message.content) == '' or :
             pass
         else:
-            await message.reply(meowify(remove_links(message.content)) + '\n\n\\- Ghostfaggle')
+            await message.reply(owoify(remove_links(message.content), Owoness.Uvu) + '\n\n\\- Ghostfaggle')
 
     meow_str = sanitize_str(message.content)
     if meow_str[:4] in ('MEOW', 'MEWO', 'MROW', 'MIAU', 'MIAO') or meow_str[:3] in ('NYA', 'MAO'):
