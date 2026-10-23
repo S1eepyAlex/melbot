@@ -31,7 +31,11 @@ logging.basicConfig(level=logging.ERROR)
 
 
 global host 
-host = '127.0.0.1:5000'
+with open('host', 'r') as file:
+    host = file.read().strip()
+
+with open('token', 'r') as file:
+    BOT_TOKEN = file.read().strip()
 
 URI = f"http://{host}/v1/chat/completions"
 global history 
@@ -67,8 +71,7 @@ else:
     f.write(json_object)
 
 
-with open('token', 'r') as file:
-    BOT_TOKEN = file.read().strip()
+
 
 bot = cds.Bot(command_prefix="!", intents=discord.Intents.all())
 
