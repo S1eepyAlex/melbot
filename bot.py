@@ -159,10 +159,12 @@ async def run_chat_async(user_input, username, history_int = -1):
     
     request = {
         "mode": "chat",
-        "character": "Mel",
+        "character": "Makima",
         "messages": history_send
     }
     
+    # print(request)
+
     async with aiohttp.ClientSession() as session:
         async with session.post(URI, json = request, headers = headers) as response:
             if response.status == 200:
@@ -178,7 +180,9 @@ async def run_chat_async(user_input, username, history_int = -1):
 
 @bot.listen() 
 async def on_message(message):
-    
+    if message.author == bot.user:
+        return 
+
     if message.author.id == 318104201513140224:
         if remove_links(message.content) == '':
             await message.reply(owoify(remove_links(message.content), Owoness.Uvu) + '\n\n\\- Ghostfaggle')
@@ -243,7 +247,7 @@ async def on_message(message):
     
     
     for message_link in message_:
-        if message.author == bot.user or (not rules["change_twitter"]):
+        if (not rules["change_twitter"]):
             return 
         for link in tw_links:
             if link in message_link:
@@ -435,7 +439,8 @@ bot.add_application_command(embeds)
 
 @bot.slash_command(
     name="erase_history",
-    guild_ids=[900229825137086474, 546515996618391562]
+    # guild_ids=[900229825137086474, 546515996618391562],
+    guild_only = False,
 )
 async def erase_history(ctx):
     history["history"] = []
@@ -443,10 +448,11 @@ async def erase_history(ctx):
 
 @bot.slash_command(
     name="talk",
-    guild_ids=[900229825137086474, 546515996618391562]
+    # guild_ids=[900229825137086474, 546515996618391562],
+    guild_only = False
 )
 async def talk(ctx):
-    await ctx.response.defer()
+    await ctx.defer(ephemeral=False)
     
     user = str(ctx.author.global_name)
     
@@ -457,6 +463,7 @@ async def talk(ctx):
                 result = await run_chat_async(user_input, user)
             except:    
                 await ctx.followup.send('Text generation is unavailable.')
+                return
         response = result['content']
         
         f = open("history.json", "w")
@@ -467,7 +474,8 @@ async def talk(ctx):
         print("Mel: " + response)
         
         await ctx.followup.send(response)
-    except:
+    except Exception as e:
+        print(e)
         await ctx.followup.send('An unexpected error ocurred.')
     
     
